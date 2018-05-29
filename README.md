@@ -1,5 +1,4 @@
 # sysinfo
-### _Knut Olav Bøhmer <bohmer@gmail.com>_
 
 This is a project is a cffi wrapper for the sysinfo(2) syscall
 
