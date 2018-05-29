@@ -3,6 +3,8 @@
 
 (include "sys/sysinfo.h")
 
+(constant (si-load-shift "SI_LOAD_SHIFT") :type integer)
+
 (cstruct sysinfo "struct sysinfo"
          (uptime "uptime" :type :long)
          (loads "loads" :type :long :count 3)
