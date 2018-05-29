@@ -1,6 +1,6 @@
 # sysinfo
 
-This is a project is a cffi wrapper for the sysinfo(2) syscall
+A cffi wrapper for the sysinfo(2) syscall
 
 ## License
 
