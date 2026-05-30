@@ -1,0 +1,24 @@
+# Compiled Lisp
+*.fasl
+*.fas
+*.lx64fsl
+*.lx32fsl
+*.dx64fsl
+*.dx32fsl
+*.ufsl
+*.abcl
+
+# ASDF / build caches
+.cache/
+*.build-report
+system-index.txt
+
+# Roswell / Qlot
+.qlot/
+qlfile.lock
+
+# Editor / OS cruft
+*~
+\#*\#
+.\#*
+.DS_Store

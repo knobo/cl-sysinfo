@@ -7,7 +7,7 @@
 
 (cstruct sysinfo "struct sysinfo"
          (uptime "uptime" :type :long)
-         (loads "loads" :type :long :count 3)
+         (loads "loads" :type :ulong :count 3)
          (totalram "totalram" :type  :ulong)
          (freeram "freeram" :type  :ulong)
          (sharedram "sharedram" :type  :ulong)
