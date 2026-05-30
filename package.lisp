@@ -3,18 +3,11 @@
 (defpackage #:sysinfo
   (:use #:cl #:cffi)
   (:export
+   ;; Queries
    #:sysinfo
-   #:uptime
-   #:loads
-   #:totalram
-   #:freeram
-   #:sharedram
-   #:bufferram
-   #:totalswap
-   #:freeswap
-   #:procs
-   #:totalhigh
-   #:freehigh
-   #:mem-unit
    #:sysinfo-list
-   #:sysinfo-alist))
+   #:sysinfo-alist
+   #:uptime-duration
+   ;; Conditions
+   #:sysinfo-error
+   #:sysinfo-error-code))
