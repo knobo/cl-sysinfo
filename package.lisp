@@ -10,4 +10,5 @@
    #:uptime-duration
    ;; Conditions
    #:sysinfo-error
-   #:sysinfo-error-code))
+   #:sysinfo-error-code
+   #:sysinfo-error-errno))

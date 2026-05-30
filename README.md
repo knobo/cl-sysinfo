@@ -50,23 +50,31 @@ Returns the current system statistics as a plist:
 > bytes, not bytes. Multiply by `:mem-unit` to get a value in bytes (it is
 > usually `1`).
 
-### `(sysinfo:sysinfo-alist)` → alist
+### `(sysinfo:sysinfo-alist &optional info)` → alist
 
 The same data as `sysinfo`, but as an association list of `(KEY . VALUE)`.
 
-### `(sysinfo:sysinfo-list)` → list
+### `(sysinfo:sysinfo-list &optional info)` → list
 
-Just the values, in the same order as `sysinfo`.
+The values, in the same order as `sysinfo`. Note that the `:loads` value is
+itself a list, so the result is not fully flat.
 
-### `(sysinfo:uptime-duration)` → `local-time-duration:duration`
+### `(sysinfo:uptime-duration &optional info)` → `local-time-duration:duration`
 
 The system uptime as a `local-time-duration` duration, ready for formatting
 or arithmetic.
 
+> Each of the three accessors above takes an optional `info` plist (as
+> returned by `sysinfo`). Pass one you already have to avoid an extra syscall
+> and to get a consistent snapshot across calls; otherwise a fresh one is
+> fetched.
+
 ### Conditions
 
 `sysinfo:sysinfo-error` is signalled (a subclass of `cl:error`) if the
-syscall fails. Its return code is available via `sysinfo:sysinfo-error-code`.
+syscall fails. The syscall return code is available via
+`sysinfo:sysinfo-error-code`, and the C `errno` (when the implementation
+exposes it) via `sysinfo:sysinfo-error-errno`.
 
 ## Tests
 

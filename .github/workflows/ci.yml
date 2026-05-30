@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    name: Test (${{ matrix.lisp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lisp:
+          - sbcl-bin
+          - ccl-bin
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Roswell and the Lisp implementation
+        uses: 40ants/setup-lisp@v4
+        with:
+          asdf-system: cl-sysinfo
+
+      - name: Select implementation
+        run: ros use ${{ matrix.lisp }}
+
+      - name: Run tests
+        run: |
+          ros -e '(handler-case
+                     (progn (ql:quickload :cl-sysinfo/test)
+                            (asdf:test-system :cl-sysinfo)
+                            (uiop:quit 0))
+                     (error (e)
+                       (format *error-output* "~&Test run failed: ~A~%" e)
+                       (uiop:quit 1)))'

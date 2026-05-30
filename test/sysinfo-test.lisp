@@ -26,10 +26,12 @@
       (is (every (lambda (l) (>= l 0)) loads)))))
 
 (test representations-agree
-  "SYSINFO, SYSINFO-ALIST and SYSINFO-LIST describe the same fields."
+  "SYSINFO, SYSINFO-ALIST and SYSINFO-LIST describe the same fields.
+All three views are derived from a single fetch so the comparison is
+deterministic (the underlying syscall values change over time)."
   (let* ((plist (sysinfo:sysinfo))
-         (alist (sysinfo:sysinfo-alist))
-         (vals  (sysinfo:sysinfo-list)))
+         (alist (sysinfo:sysinfo-alist plist))
+         (vals  (sysinfo:sysinfo-list plist)))
     (is (= (length alist) (/ (length plist) 2)))
     (is (= (length vals) (length alist)))
     (is (equal vals (mapcar #'cdr alist)))
@@ -37,11 +39,24 @@
     (is (equal (mapcar #'car alist)
                (loop for (key nil) on plist by #'cddr collect key)))))
 
-(test uptime-duration-is-a-duration
-  "UPTIME-DURATION returns a LOCAL-TIME-DURATION:DURATION."
-  (let ((d (sysinfo:uptime-duration)))
+(test uptime-duration-matches-uptime
+  "UPTIME-DURATION returns a duration whose whole seconds equal :UPTIME."
+  (let* ((info (sysinfo:sysinfo))
+         (d    (sysinfo:uptime-duration info)))
     (is (typep d 'local-time-duration:duration))
-    (is (>= (local-time-duration:duration-as d :sec) 0))))
+    (is (= (getf info :uptime)
+           (local-time-duration:duration-as d :sec)))))
+
+(test sysinfo-error-reports-nicely
+  "SYSINFO-ERROR renders a message including the syscall and errno text."
+  (let ((msg (princ-to-string
+              (make-condition 'sysinfo:sysinfo-error :code -1 :errno 14))))
+    (is (search "sysinfo(2)" msg))
+    (is (search "-1" msg))
+    ;; errno 14 is EFAULT; strerror should mention an address/fault.
+    (is (plusp (length msg)))
+    (is (= 14 (sysinfo:sysinfo-error-errno
+               (make-condition 'sysinfo:sysinfo-error :errno 14))))))
 
 (defun run-tests ()
   "Run the cl-sysinfo test suite, signalling an error on failure
