@@ -15,23 +15,20 @@ jobs:
         lisp:
           - sbcl-bin
           - ccl-bin
+    env:
+      LISP: ${{ matrix.lisp }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Roswell and the Lisp implementation
-        uses: 40ants/setup-lisp@v4
-        with:
-          asdf-system: cl-sysinfo
+      - name: Install Roswell
+        run: |
+          curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | bash
+          echo "$HOME/.roswell/bin" >> "$GITHUB_PATH"
 
-      - name: Select implementation
-        run: ros use ${{ matrix.lisp }}
+      - name: Install ${{ matrix.lisp }}
+        run: |
+          ros install ${{ matrix.lisp }}
+          ros use ${{ matrix.lisp }}
 
       - name: Run tests
-        run: |
-          ros -e '(handler-case
-                     (progn (ql:quickload :cl-sysinfo/test)
-                            (asdf:test-system :cl-sysinfo)
-                            (uiop:quit 0))
-                     (error (e)
-                       (format *error-output* "~&Test run failed: ~A~%" e)
-                       (uiop:quit 1)))'
+        run: ./scripts/run-tests.sh
