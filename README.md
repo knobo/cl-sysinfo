@@ -1,5 +1,7 @@
 # cl-sysinfo
 
+[![CI](https://github.com/knobo/cl-sysinfo/actions/workflows/ci.yml/badge.svg)](https://github.com/knobo/cl-sysinfo/actions/workflows/ci.yml)
+
 A CFFI wrapper for the Linux [`sysinfo(2)`](https://man7.org/linux/man-pages/man2/sysinfo.2.html)
 syscall, giving access to uptime, load averages, and memory/swap usage.
 
@@ -82,7 +84,13 @@ exposes it) via `sysinfo:sysinfo-error-errno`.
 (asdf:test-system "cl-sysinfo")
 ```
 
-The test suite uses [FiveAM](https://github.com/lispci/fiveam).
+The test suite uses [FiveAM](https://github.com/lispci/fiveam). From a shell
+you can also run `./scripts/run-tests.sh` (requires
+[Roswell](https://roswell.github.io/)).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
