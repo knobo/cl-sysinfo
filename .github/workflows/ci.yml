@@ -18,7 +18,7 @@ jobs:
     env:
       LISP: ${{ matrix.lisp }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Roswell
         run: |
